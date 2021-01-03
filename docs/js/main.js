@@ -1,36 +1,34 @@
 let masterGameList = null;
 let gameList = null;
 
-
 function init() {
     $.getJSON("./json/gameDetailedList.json", function(listResult){
         // load the data for all the games
         masterGameList = listResult
-            .sort(function(a, b){return b.metacriticScore - a.metacriticScore});;
-            initCardsASync(masterGameList);
+            .sort(function(a, b){return b.metacriticScore - a.metacriticScore});
+            initCards(masterGameList);
     });
 }
 
-function initCardsASync(cardList) {
-    setTimeout(function() {
+function initCards(cardList) {
         let container = d3.select("#game-list");
         container.html("");
 
         let renderedGames = []
-        for (let i = 0; i < cardList.length; i++) {
-            let game = cardList[i];
+        for (let game of cardList) {
             if (renderedGames.includes(game.id)){
                 continue;
             }
             renderedGames.push(game.id);
             renderCardASync(container,game);
         }
-    }, 0);
 }
 
 function renderCardASync(container,game) {
     setTimeout(function() {
         let cardContainer = container.append("a").attr("class","card").attr("id",game.id)
+            .attr('data-mc',game.metacriticScore ?? 0)
+            .attr('data-sc',calculateScore(game.score,game.userReviews))
             .attr("href","https://store.steampowered.com/app/"+ game.id)
             .attr("target","_blank");
         
@@ -66,22 +64,22 @@ function renderCardASync(container,game) {
 }
 
 
-function filterCardsASync(cardList) {
+function filterCards(cardList) {
     setTimeout(function() {
-        for (let i = 0; i < masterGameList.length; i++) {
-            if (cardList.some(x => x.id == masterGameList[i].id)){
-                $('#'+masterGameList[i].id).show();
+        for (let masterGame of masterGameList) {
+            if (cardList.includes(masterGame.id)){
+                $(`#${masterGame.id}`).show();
             }else{
-                $('#'+masterGameList[i].id).hide();
+                $(`#${masterGame.id}`).hide();
             }
-        }
+          }
     }, 0);
 }
 
-function showAllCardsASync() {
+function showAllCards() {
     setTimeout(function() {
-        for (let i = 0; i < masterGameList.length; i++) {
-            $('#'+masterGameList[i].id).show();
+        for (let masterGame of masterGameList) {
+            $(`#${masterGame.id}`).show();
         }
     }, 0);
 }
@@ -94,12 +92,34 @@ function filterTagToggle(elem){
     }
     if (filterTagList.length > 0){
         if (filterTagList.includes("VR Support")){
-            gameList = masterGameList.filter(g => filterTagList.every(f => g.genres.includes(f) || g.features.includes(f)));
+            gameList = masterGameList.filter(g => filterTagList.every(f => g.genres.includes(f) || g.features.includes(f))).map(x=>x.id);
         }else{
-            gameList = masterGameList.filter(g => filterTagList.every(f =>  g.genres.includes(f)));
+            gameList = masterGameList.filter(g => filterTagList.every(f =>  g.genres.includes(f))).map(x=>x.id);
         }
-        filterCardsASync(gameList);
+        filterCards(gameList);
     }else{
-        showAllCardsASync();
+        showAllCards();
     }
+}
+
+function sortList(elem){
+    d3.select('.button-active').classed('button-active',false);
+    d3.select(elem).classed("button-active", true);
+    
+    // var $cards = $('.card').detach()
+    // $cards = $cards.sort((a,b) => $(b).attr(elem.id) - $(a).attr(elem.id));
+    // $('#game-list').html($cards);
+
+    var $cards = $('.card');
+    $cards = $cards.sort((a,b) => $(b).attr(elem.id) - $(a).attr(elem.id));
+    for (let card of $cards){
+        $('#game-list').append(card);
+    }
+}
+
+function calculateScore(score,reviews){
+    if (score == null || reviews == null){
+        return 0;
+    }
+    return Math.round((score/100) * reviews);
 }
