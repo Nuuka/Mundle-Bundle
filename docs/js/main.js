@@ -7,16 +7,30 @@ function init() {
         // load the data for all the games
         masterGameList = listResult
             .sort(function(a, b){return b.metacriticScore - a.metacriticScore});;
-        initCards();
+            initCardsASync(masterGameList);
     });
 }
 
-function initCards() {
-    let container = d3.select("#game-list");
-    for (let i = 0; i < masterGameList.length; i++) {
-        let game = masterGameList[i];
+function initCardsASync(cardList) {
+    setTimeout(function() {
+        let container = d3.select("#game-list");
+        container.html("");
 
-        let cardContainer = container.append("a").attr("class","card")
+        let renderedGames = []
+        for (let i = 0; i < cardList.length; i++) {
+            let game = cardList[i];
+            if (renderedGames.includes(game.id)){
+                continue;
+            }
+            renderedGames.push(game.id);
+            renderCardASync(container,game);
+        }
+    }, 0);
+}
+
+function renderCardASync(container,game) {
+    setTimeout(function() {
+        let cardContainer = container.append("a").attr("class","card").attr("id",game.id)
             .attr("href","https://store.steampowered.com/app/"+ game.id)
             .attr("target","_blank");
         
@@ -45,6 +59,47 @@ function initCards() {
         game.genres.forEach(genre => {
             cardDetailsGenres.append("div").attr("class","tag").html(genre);
         });
+        if (game.features.includes("VR Support")){
+            cardDetailsGenres.append("div").attr("class","tag").html("VR Support");
+        }
+    }, 0);
+}
 
+
+function filterCardsASync(cardList) {
+    setTimeout(function() {
+        for (let i = 0; i < masterGameList.length; i++) {
+            if (cardList.some(x => x.id == masterGameList[i].id)){
+                $('#'+masterGameList[i].id).show();
+            }else{
+                $('#'+masterGameList[i].id).hide();
+            }
+        }
+    }, 0);
+}
+
+function showAllCardsASync() {
+    setTimeout(function() {
+        for (let i = 0; i < masterGameList.length; i++) {
+            $('#'+masterGameList[i].id).show();
+        }
+    }, 0);
+}
+function filterTagToggle(elem){
+    var group = document.tagForm.tagGroup;
+    var filterTagList = [];
+    for (var i=0; i<group.length; i++) {
+        if (group[i].checked)
+            filterTagList.push(group[i].id)
+    }
+    if (filterTagList.length > 0){
+        if (filterTagList.includes("VR Support")){
+            gameList = masterGameList.filter(g => filterTagList.every(f => g.genres.includes(f) || g.features.includes(f)));
+        }else{
+            gameList = masterGameList.filter(g => filterTagList.every(f =>  g.genres.includes(f)));
+        }
+        filterCardsASync(gameList);
+    }else{
+        showAllCardsASync();
     }
 }

@@ -17,6 +17,7 @@ body{
 
     background-color: #1b2838;
     margin: 0px;
+    padding-top: 20px;
 }
 
 .game-cards{
@@ -134,4 +135,22 @@ body{
     border-radius: 3px;
     font-size: 14px;
     line-height: 19px;
+}
+
+.filter-tags-group {
+    display: block;
+    margin: 5px 30px;
+    color: #67c1f5;
+    width: 650px;
+}
+
+.svg-icon{
+    background-color: #4786ab;
+    border-radius: 2px;
+}
+.pretty {
+    background-color: #1f3848;
+    padding: 0px 0.5em;
+    border-radius: 2px;
+    margin-right: 0px !important;
 }
