@@ -1,0 +1,137 @@
+:root {
+    --mdc-theme-primary: #c19251;
+    --mdc-theme-secondary: #f7cc64;
+    --mdc-theme-background: #f4f6e1;
+}
+
+body{
+    /* background-color: #4fbaa0; */
+    /* background-color: #f1e9be; */
+    /* background-color: #e6d596; */
+
+    /* background-size: 20px 20px;
+    background-color: rgb(34, 74, 66);
+    background-image: radial-gradient(rgb(41, 81, 74) 20%, rgba(0, 0, 0, 0) 0px), radial-gradient(rgb(41, 81, 74) 20%, rgba(0, 0, 0, 0) 0px); */
+    
+    font-family: 'Titillium Web', sans-serif;
+
+    background-color: #1b2838;
+    margin: 0px;
+}
+
+.game-cards{
+    margin-top: 30px;
+    opacity: 100%;
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+}
+
+.card{
+    text-decoration: none;
+    width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #16202d;
+    /* margin-bottom: 15px; */
+
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+
+    border: 1px solid rgba(139, 184, 224, 0);
+    box-sizing: border-box;
+}
+.card:hover{
+    border: 1px solid rgba( 139, 185, 224, 0.2 );
+    background: rgba( 0, 0, 0, 0.4 );
+}
+
+.card-inner-container{
+    display: flex;
+}
+
+.card-title{
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 2px 10px;
+    background-color: #101a27;
+
+    font-size: 18px;
+    font-weight: 600;
+    
+    text-align: left;
+
+    /* border-bottom: 1px solid #0f161f; */
+    /* border-radius: 0px 0px 40px 40px; */
+}
+.card-title-name{
+    color: #c7d5e0;
+    max-width: 85%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.card-title-mc{
+    color: #c7d5e0;
+    float: right;
+}
+.card-title-mc 
+.logo{
+    background-image: url(https://steamstore-a.akamaihd.net/public/images/v6/mc_logo_no_text.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 21px;
+    float: left;
+    margin-right: 5px;
+}
+
+.card-image{
+    width: 225px;
+}
+
+.card-details{
+    width: 100%;
+}
+
+.card-details-score{
+    margin-top: 3px;
+    color: #c7d5e0;
+    text-align: center;
+}
+.card-details-score
+.logo{
+    content: "";
+    display: inline-flex;
+    background-image: url(https://steamstore-a.akamaihd.net/public/images/v6/user_reviews_positive.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    height: 24px;
+    width: 20px;
+    margin-right: 5px;
+}
+
+.card-details-genres{
+    color: #67c1f5;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 7px;
+    margin-left: 5px;
+}
+.card-details-genres
+.tag{
+    background-color: #1f3848;
+    margin: 2px 1px;
+    text-align: center;
+    padding: 0 7px;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 19px;
+}
