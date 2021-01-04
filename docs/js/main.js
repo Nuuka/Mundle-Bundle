@@ -7,8 +7,8 @@ function init() {
     $.getJSON("./json/gameDetailedList.json", function(listResult){
         // load the data for all the games
         masterGameList = listResult
-            .sort(function(a, b){return b.metacriticScore - a.metacriticScore});
-            initCards(masterGameList);
+            .sort(function(a, b){return calculateScore(b.score,b.userReviews) - calculateScore(a.score,a.userReviews)});
+        initCards(masterGameList);
     });
 }
 
