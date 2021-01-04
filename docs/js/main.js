@@ -1,5 +1,7 @@
 let masterGameList = null;
-let gameList = null;
+let filteredGameList = null;
+let filterTags = [];
+let searchValue = null;
 
 function init() {
     $.getJSON("./json/gameDetailedList.json", function(listResult){
@@ -63,11 +65,19 @@ function renderCardASync(container,game) {
     }, 0);
 }
 
-
-function filterCards(cardList) {
+function filterCards() {
     setTimeout(function() {
+        if (searchValue == null && (filterTags == null || filterTags.length == 0)){
+            showAllCards();
+            return;
+        }
+        let gameList = filteredGameList ?? masterGameList;
+        
+        if (searchValue != null && searchValue != ""){
+            gameList = gameList.filter(g => searchString(g.name,searchValue));
+        }
         for (let masterGame of masterGameList) {
-            if (cardList.includes(masterGame.id)){
+            if (gameList.map(x=>x.id).includes(masterGame.id)){
                 $(`#${masterGame.id}`).show();
             }else{
                 $(`#${masterGame.id}`).hide();
@@ -78,28 +88,30 @@ function filterCards(cardList) {
 
 function showAllCards() {
     setTimeout(function() {
+        filteredGameList = null;
         for (let masterGame of masterGameList) {
             $(`#${masterGame.id}`).show();
         }
     }, 0);
 }
+
 function filterTagToggle(elem){
     var group = document.tagForm.tagGroup;
-    var filterTagList = [];
+    filterTags = [];
     for (var i=0; i<group.length; i++) {
         if (group[i].checked)
-            filterTagList.push(group[i].id)
+            filterTags.push(group[i].id)
     }
-    if (filterTagList.length > 0){
-        if (filterTagList.includes("VR Support")){
-            gameList = masterGameList.filter(g => filterTagList.every(f => g.genres.includes(f) || g.features.includes(f))).map(x=>x.id);
+    if (filterTags != null && filterTags.length > 0){
+        if (filterTags.includes("VR Support")){
+            filteredGameList = masterGameList.filter(g => filterTags.every(f => g.genres.includes(f) || g.features.includes(f)));
         }else{
-            gameList = masterGameList.filter(g => filterTagList.every(f =>  g.genres.includes(f))).map(x=>x.id);
+            filteredGameList = masterGameList.filter(g => filterTags.every(f =>  g.genres.includes(f)));
         }
-        filterCards(gameList);
     }else{
-        showAllCards();
+        filteredGameList = null;
     }
+    filterCards();
 }
 
 function sortList(elem){
@@ -117,9 +129,23 @@ function sortList(elem){
     }
 }
 
+function search(elem){
+    searchValue = elem.value;
+    filterCards();
+}
+
+
+//#region TOOLS
 function calculateScore(score,reviews){
     if (score == null || reviews == null){
         return 0;
     }
     return Math.round((score/100) * reviews);
 }
+function searchString(text, search){
+    search = search.replace(/\s/g, '').toLowerCase();
+    text = text.replace(/\s/g, '').toLowerCase();
+
+    return text.includes(search);
+}
+//#endregion

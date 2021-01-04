@@ -189,3 +189,34 @@ body{
 .button-active{
     background-color: #225577 !important;
 }
+
+.search-box {
+    background: url('/css/searchicon.png') right no-repeat;
+    /* background-position: 10px 12px; */
+    background-color: #1f3848;
+    /* background-size: 43px; */
+
+    width: 100%;
+    padding: 12px 10px 12px 30px;
+    margin-left: 2em;
+    border:  none;
+    border-radius: 4px;
+
+    color: #c7d5e0;
+    font-size: 28px;
+}
+.search-box:hover{
+    background-color:#1c3241;
+}
+.search-box::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #c7d5e0;
+    opacity: 0.5; /* Firefox */
+}
+.search-box:focus {
+    background-color: #225577 !important;
+    outline: none !important;
+}
+.search-box:focus::placeholder {
+    color: transparent;
+}
+    
