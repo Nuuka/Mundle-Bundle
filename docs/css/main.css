@@ -191,7 +191,7 @@ body{
 }
 
 .search-box {
-    background: url('/css/searchicon.png') right no-repeat;
+    background: url('searchicon.png') right no-repeat;
     /* background-position: 10px 12px; */
     background-color: #1f3848;
     /* background-size: 43px; */
