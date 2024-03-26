@@ -7,29 +7,31 @@ function init() {
     $.getJSON("./json/gameDetailedList.json", function(listResult){
         // load the data for all the games
         masterGameList = listResult
-            .sort(function(a, b){return calculateScore(b.score,b.userReviews) - calculateScore(a.score,a.userReviews)});
+            .sort(function(a, b){return a.rank - b.rank});
+            //.sort(function(a, b){return calculateScore(b.score,b.userReviews) - calculateScore(a.score,a.userReviews)});
         initCards(masterGameList);
     });
 }
 
 function initCards(cardList) {
-        let container = d3.select("#game-list");
-        container.html("");
+    let container = d3.select("#game-list");
+    container.html("");
 
-        let renderedGames = []
-        for (let game of cardList) {
-            if (renderedGames.includes(game.id)){
-                continue;
-            }
-            renderedGames.push(game.id);
-            renderCardASync(container,game);
+    let renderedGames = []
+    for (let game of cardList) {
+        if (renderedGames.includes(game.id)){
+            continue;
         }
+        renderedGames.push(game.id);
+        renderCardASync(container,game);
+    }
 }
 
 function renderCardASync(container,game) {
     setTimeout(function() {
         let cardContainer = container.append("a").attr("class","card").attr("id",game.id)
             .attr('data-mc',game.metacriticScore ?? 0)
+            .attr('data-rk',game.rank ?? 0)
             .attr('data-sc',calculateScore(game.score,game.userReviews))
             .attr("href","https://store.steampowered.com/app/"+ game.id)
             .attr("target","_blank");
@@ -56,10 +58,10 @@ function renderCardASync(container,game) {
             
         
         let cardDetailsGenres = cardDetails.append("div").attr("class","card-details-genres");
-        game.genres.forEach(genre => {
+        game.genres?.map(genre => {
             cardDetailsGenres.append("div").attr("class","tag").html(genre);
-        });
-        if (game.features.includes("VR Support")){
+        })
+        if (game.features.includes("VR")){
             cardDetailsGenres.append("div").attr("class","tag").html("VR Support");
         }
     }, 0);
@@ -103,8 +105,8 @@ function filterTagToggle(elem){
             filterTags.push(group[i].id)
     }
     if (filterTags != null && filterTags.length > 0){
-        if (filterTags.includes("VR Support")){
-            filteredGameList = masterGameList.filter(g => filterTags.every(f => g.genres.includes(f) || g.features.includes(f)));
+        if (filterTags.includes("VR")){
+            filteredGameList = masterGameList.filter(g => filterTags.every(f => g.genres.includes(f) || g.tags.includes(f)));
         }else{
             filteredGameList = masterGameList.filter(g => filterTags.every(f =>  g.genres.includes(f)));
         }
@@ -122,8 +124,11 @@ function sortList(elem){
     // $cards = $cards.sort((a,b) => $(b).attr(elem.id) - $(a).attr(elem.id));
     // $('#game-list').html($cards);
 
-    var $cards = $('.card');
-    $cards = $cards.sort((a,b) => $(b).attr(elem.id) - $(a).attr(elem.id));
+    var $cards = $('.card');   
+    if (elem.id == "data-rk")
+        $cards = $cards.sort((a,b) => $(a).attr(elem.id) - $(b).attr(elem.id));
+    else
+        $cards = $cards.sort((a,b) => $(b).attr(elem.id) - $(a).attr(elem.id));
     for (let card of $cards){
         $('#game-list').append(card);
     }

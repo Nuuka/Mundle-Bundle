@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="pretty p-svg p-curve">
-                        <input type="checkbox" id="VR Support" name="tagGroup" onClick="filterTagToggle(this);" />
+                        <input type="checkbox" id="VR" name="tagGroup" onClick="filterTagToggle(this);" />
                         <div class="state p-success">
                             <!-- svg path -->
                             <svg class="svg svg-icon" viewBox="0 0 20 20">
@@ -146,7 +146,8 @@
                 </form>
             </div>
             <div id="sortButtons">
-                <div class="button button-active" id="data-sc" onclick="sortList(this)">Sort by Reviews</div>
+                <div class="button button-active" id="data-rk" onclick="sortList(this)">Sort by Rank</div>
+                <div class="button" id="data-sc" onclick="sortList(this)">Sort by Reviews</div>
                 <div class="button" id="data-mc" onclick="sortList(this)">Sort by Metacritic</div>
             </div>
             <div>
